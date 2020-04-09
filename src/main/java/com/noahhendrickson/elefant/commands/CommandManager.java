@@ -26,6 +26,8 @@ public class CommandManager extends ListenerAdapter {
         this.commands = Arrays.asList(
                 // Java Commands
                 new BotCommand(),
+                new EightBallCommand(),
+                new HelpCommand(this),
                 new PingCommand(),
 
                 // Kotlin Commands
@@ -60,5 +62,9 @@ public class CommandManager extends ListenerAdapter {
                 return;
             }
         }
+    }
+
+    public List<ICommand> getCommands() {
+        return commands;
     }
 }

@@ -5,10 +5,7 @@ import com.noahhendrickson.elefant.listeners.SuggestionsListener;
 import com.noahhendrickson.elefant.utils.color.ColorThief;
 import com.noahhendrickson.util.FileUtilKt;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-import javax.annotation.Nonnull;
 import javax.imageio.ImageIO;
 import javax.security.auth.login.LoginException;
 import java.awt.*;
@@ -33,9 +30,10 @@ public class Elefant {
 
         try {
             JDABuilder.createDefault(loginDetails.get(0))
-                    .addEventListeners(new CommandManager(this))
-                    .addEventListeners(new SuggestionsListener())
-                    .build();
+                    .addEventListeners(
+                            new CommandManager(this),
+                            new SuggestionsListener()
+                    ).build();
         } catch (LoginException e) {
             e.printStackTrace();
         }

@@ -31,6 +31,10 @@ public abstract class Command implements ICommand {
                 .append(event.getAuthor().getAsTag()).append("`").build(), event);
     }
 
+    protected String getCommand() {
+        return "`" + this.getAliases().get(0) + " " + this.getUsageInstructions() + "`";
+    }
+
     @SafeVarargs
     protected final <T> List<T> asList(T... a) {
         return Arrays.asList(a);
