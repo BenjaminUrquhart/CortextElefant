@@ -25,7 +25,7 @@ public class BotCommand extends Command {
                 .addField("Name", user.getName(), false)
                 .addField("ID:", user.getId(), false)
                 .addField("Owner", "Noah Hendrickson", false)
-                .addField("Github", "Comming Soon...", false)
+                .addField("Github", "https://github.com/NoahH99/CortextElefant", false)
                 .setFooter("Copyright \u00a9 2020"), event);
     }
 

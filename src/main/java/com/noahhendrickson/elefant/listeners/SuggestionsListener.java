@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -23,7 +24,7 @@ public class SuggestionsListener extends ListenerAdapter {
     public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
         if (event.getAuthor().isBot() || event.getAuthor().isFake()) return;
 
-        List<Long> channels = Collections.singletonList(507387919779233816L);
+        List<Long> channels = Arrays.asList(507387919779233816L, 697689118339235851L);
         long idLong = event.getChannel().getIdLong();
 
         if (channels.contains(idLong)) {
@@ -53,7 +54,7 @@ public class SuggestionsListener extends ListenerAdapter {
 
                 channel.sendMessage(new EmbedBuilder()
                         .setColor(Elefant.getColor(effectiveAvatarUrl, event.getGuild().getSelfMember().getColor()))
-                        .setAuthor(author.getAsTag(), effectiveAvatarUrl)
+                        .setAuthor(author.getAsTag(), null, effectiveAvatarUrl)
                         .setDescription(contentRaw)
                         .setFooter("Please react if you would like to see this!").build()).queue(message -> {
                     message.addReaction(success).queue();
@@ -61,6 +62,8 @@ public class SuggestionsListener extends ListenerAdapter {
                     message.addReaction(error).queue();
                 });
             }
+
+            event.getMessage().delete().queue();
         }
     }
 }
