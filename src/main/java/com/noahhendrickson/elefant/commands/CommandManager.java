@@ -42,10 +42,10 @@ public class CommandManager extends ListenerAdapter {
         if ((event.getAuthor().isBot() || event.getAuthor().isFake()) && !respondToBotsOrFakes) return;
 
         Message message = event.getMessage();
-        String name = message.getContentStripped().split(" ")[0];
 
         if (event.getTextChannel().getTopic() != null &&
-                event.getTextChannel().getTopic().contains("{-" + name.substring(1) + "}")) {
+                event.getTextChannel().getTopic().contains("{-" +
+                        message.getContentStripped().split(" ")[0].substring(1) + "}")) {
             if (event.getMember() == null || !event.getMember().hasPermission(Permission.ADMINISTRATOR)) {
                 event.getTextChannel().sendMessage("<:error:697249583427747900> " +
                         "This command is blocked in this channel!").complete();
@@ -54,8 +54,9 @@ public class CommandManager extends ListenerAdapter {
         }
 
         for (ICommand command : commands) {
-            if (command.getAliases().contains(name)) {
-                command.execute(message.getContentRaw().split(" "), event);
+            String raw = message.getContentRaw();
+            if (command.getAliases().contains(raw.split(" ")[0])) {
+                command.execute(raw.split(" "), event);
                 return;
             }
         }
