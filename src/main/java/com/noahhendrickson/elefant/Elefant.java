@@ -34,8 +34,9 @@ public class Elefant {
                     .setActivity(Activity.listening("for " + PREFIX + "help"))
                     .addEventListeners(
                             new CommandExecutor(logger),
-                            new SuggestionsListener(),
-                            new LoggingListener(logger)).build();
+                            new LoggingListener(logger),
+                            new SuggestionsListener())
+                    .build();
         } catch (LoginException e) {
             e.printStackTrace();
         }
