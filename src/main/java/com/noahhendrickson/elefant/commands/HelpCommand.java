@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 /**
  * Created by Noah Hendrickson on 4/12/2020
@@ -31,16 +32,27 @@ public class HelpCommand implements ICommand {
             AtomicBoolean foundCommand = new AtomicBoolean(false);
             commands.forEach(command -> {
                 if (command.getCommand().equalsIgnoreCase(cmd) || command.getAliases().contains(cmd)) {
-                    bundle.sendMessage(
-                            new EmbedBuilder()
-                                    .setColor(bundle.getGuild().getSelfMember().getColor())
-                                    .setTitle(command.getCommand().substring(0, 1).toUpperCase() + command.getCommand().substring(1))
-                                    .setDescription(command.getDescription())
-                                    .addField("Command Usage", "```fix\n" + Elefant.PREFIX +
-                                            command.getCommand() + (command.getUsage().equals("") ? "" : " ") +
-                                            command.getUsage() + "\n```", false)
-                    );
 
+                    EmbedBuilder embed = new EmbedBuilder()
+                            .setColor(bundle.getGuild().getSelfMember().getColor())
+                            .setTitle(command.getCommand().substring(0, 1).toUpperCase() + command.getCommand().substring(1))
+                            .setDescription(command.getDescription());
+
+                    List<Permission> userPerms = command.getRequiredPermissions();
+                    if (userPerms.size() > 0) embed.addField("Required Permissions",
+                            userPerms.stream().map(Permission::getName)
+                                    .collect(Collectors.joining(", ")), true);
+
+                    List<Permission> botPerms = command.getRequiredBotPermissions();
+                    if (userPerms.size() > 0) embed.addField("Required Bot Permissions",
+                            botPerms.stream().map(Permission::getName)
+                                    .collect(Collectors.joining(", ")), true);
+
+                    embed.addField("Command Usage", "```fix\n" + Elefant.PREFIX +
+                            command.getCommand() + (command.getUsage().equals("") ? "" : " ") +
+                            command.getUsage() + "\n```", false);
+
+                    bundle.sendMessage(embed);
                     foundCommand.set(true);
                 }
             });
@@ -50,9 +62,12 @@ public class HelpCommand implements ICommand {
         } else {
             StringBuilder message = new StringBuilder();
 
-            commands.forEach(command -> message.append("**").append(Elefant.PREFIX).append(command.getCommand())
-                    .append(command.getUsage().equals("") ? "" : " ").append(command.getUsage()).append("** - ")
-                    .append(command.getDescription()).append("\n\n"));
+            commands.forEach(command -> {
+                if (bundle.getMember().hasPermission(command.getRequiredPermissions()))
+                    message.append("**").append(Elefant.PREFIX).append(command.getCommand())
+                            .append(command.getUsage().equals("") ? "" : " ").append(command.getUsage()).append("** - ")
+                            .append(command.getDescription()).append("\n\n");
+            });
 
             message.append("\nFor support, join https://discord.gg/vNg5RJS");
 

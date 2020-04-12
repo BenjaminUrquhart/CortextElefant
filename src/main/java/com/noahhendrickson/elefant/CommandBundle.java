@@ -14,22 +14,27 @@ import java.util.List;
  */
 public class CommandBundle {
 
-    public static final String FOOTER = "For support, join https://discord.gg/vNg5RJS";
+    public static final String FOOTER = "Elefant Productions";
 
+    private final ICommand command;
     private final List<String> args;
 
     private final User user;
     private final Member member;
+    private final Message message;
     private final TextChannel channel;
     private final Guild guild;
     private final JDA jda;
 
-    public CommandBundle(@NotNull GuildMessageReceivedEvent event) {
-        List<String> argsWithCommand = Arrays.asList(event.getMessage().getContentRaw().split(" "));
+    public CommandBundle(@NotNull GuildMessageReceivedEvent event, ICommand command) {
+        this.command = command;
 
+        List<String> argsWithCommand = Arrays.asList(event.getMessage().getContentRaw().split(" "));
         this.args = argsWithCommand.subList(1, argsWithCommand.size());
+
         this.user = event.getAuthor();
         this.member = event.getMember();
+        this.message = event.getMessage();
         this.channel = event.getChannel();
         this.guild = event.getGuild();
         this.jda = event.getJDA();
@@ -72,6 +77,22 @@ public class CommandBundle {
         for (EmbedBuilder embed : embeds) channel.sendMessage(embed.setFooter(FOOTER).build()).queue();
     }
 
+    public void sendUsageMessage() {
+        sendMessage(
+                new EmbedBuilder()
+                        .setColor(getGuild().getSelfMember().getColor())
+                        .setTitle(command.getCommand().substring(0, 1).toUpperCase() + command.getCommand().substring(1))
+                        .setDescription(command.getDescription())
+                        .addField("Command Usage", "```fix\n" + Elefant.PREFIX +
+                                command.getCommand() + (command.getUsage().equals("") ? "" : " ") +
+                                command.getUsage() + "\n```", false)
+        );
+    }
+
+    public ICommand getCommand() {
+        return command;
+    }
+
     public List<String> getArgs() {
         return args;
     }
@@ -82,6 +103,10 @@ public class CommandBundle {
 
     public Member getMember() {
         return member;
+    }
+
+    public Message getMessage() {
+        return message;
     }
 
     public TextChannel getChannel() {
