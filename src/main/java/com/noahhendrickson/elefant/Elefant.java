@@ -1,57 +1,37 @@
 package com.noahhendrickson.elefant;
 
-import com.noahhendrickson.elefant.commands.CommandManager;
 import com.noahhendrickson.elefant.listeners.SuggestionsListener;
-import com.noahhendrickson.elefant.utils.color.ColorThief;
 import com.noahhendrickson.util.FileUtilKt;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 
-import javax.imageio.ImageIO;
 import javax.security.auth.login.LoginException;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.URL;
-import java.util.List;
+import java.util.Arrays;
 
 /**
  * Created by Noah Hendrickson on 4/8/2020
  */
 public class Elefant {
 
-    private final List<String> loginDetails;
+    public static final String PREFIX = "!";
 
     public static void main(String[] args) {
         new Elefant();
     }
 
     public Elefant() {
-        loginDetails = FileUtilKt.readFileLines("LoginDetails");
-
         try {
-            JDABuilder.createDefault(loginDetails.get(0))
-                    .addEventListeners(
-                            new CommandManager(this),
-                            new SuggestionsListener()
-                    ).build();
+            JDABuilder.createDefault(FileUtilKt.readFileLines("LoginDetails").get(0), Arrays.asList(
+                    GatewayIntent.GUILD_MEMBERS,
+                    GatewayIntent.GUILD_INVITES,
+                    GatewayIntent.GUILD_MESSAGES,
+                    GatewayIntent.GUILD_VOICE_STATES,
+                    GatewayIntent.GUILD_EMOJIS))
+                    .setActivity(Activity.listening("for " + PREFIX + "help"))
+                    .addEventListeners(new CommandExecutor(), new SuggestionsListener()).build();
         } catch (LoginException e) {
             e.printStackTrace();
         }
-    }
-
-    public static Color getColor(String url, Color color) {
-        try {
-            BufferedImage image = ImageIO.read(new URL(url));
-            int[] colors = ColorThief.getColor(image);
-            return colors != null ? new Color(colors[0], colors[1], colors[2]) : color;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return color;
-    }
-
-    public List<String> getLoginDetails() {
-        return loginDetails;
     }
 }
