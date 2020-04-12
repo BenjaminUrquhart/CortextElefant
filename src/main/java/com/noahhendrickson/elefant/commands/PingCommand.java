@@ -1,39 +1,28 @@
 package com.noahhendrickson.elefant.commands;
 
+import com.noahhendrickson.elefant.CommandBundle;
+import com.noahhendrickson.elefant.ICommand;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-
-import java.util.List;
 
 /**
- * Created by Noah Hendrickson on 4/9/2020
+ * Created by Noah Hendrickson on 4/11/2020
  */
-public class PingCommand extends Command {
+public class PingCommand implements ICommand {
 
     @Override
-    public void execute(String[] args, MessageReceivedEvent event) {
-        JDA jda = event.getJDA();
-        super.sendMessage("**Pong!** Gateway: `" + jda.getGatewayPing() +
-                "` Rest: `" + jda.getRestPing().complete() + "`", event);
+    public void execute(CommandBundle bundle) {
+        JDA jda = bundle.getJDA();
+        bundle.sendMessage("**Pong!** Gateway: `" + jda.getGatewayPing() +
+                "` Rest: `" + jda.getRestPing().complete() + "`");
     }
 
     @Override
-    public List<String> getAliases() {
-        return super.asList("!ping", "!pang", "!peng", "!pong", "!pung");
+    public String getCommand() {
+        return "ping";
     }
 
     @Override
     public String getDescription() {
-        return "Check the bot's latency.";
-    }
-
-    @Override
-    public String getName() {
-        return "Ping";
-    }
-
-    @Override
-    public List<String> getUsageInstructions() {
-        return super.asList("");
+        return "Ping the bot.";
     }
 }
