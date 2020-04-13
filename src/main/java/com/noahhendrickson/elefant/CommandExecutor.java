@@ -1,6 +1,8 @@
 package com.noahhendrickson.elefant;
 
 import com.noahhendrickson.elefant.commands.*;
+import com.noahhendrickson.elefant.commands.utilities.AvatarCommand;
+import com.noahhendrickson.elefant.commands.utilities.EmojiCommand;
 import com.noahhendrickson.elefant.logging.BaseLogger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -14,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -28,6 +31,10 @@ public class CommandExecutor extends ListenerAdapter {
     public CommandExecutor(BaseLogger logger) {
         this.commands = new ArrayList<>();
         this.logger = logger;
+
+        // Utilities
+        registerCommand(new AvatarCommand());
+        registerCommand(new EmojiCommand());
 
         registerCommand(new CodeCommand());
         registerCommand(new JerCommand());
@@ -100,6 +107,7 @@ public class CommandExecutor extends ListenerAdapter {
                                                     channel.getId() + "`", true)
                                             .build()
                             ).queue();
+                        e.printStackTrace();
                     }
                 }
             }
@@ -119,8 +127,9 @@ public class CommandExecutor extends ListenerAdapter {
     }
 
     private String getErrorCode() {
+        final Random random = new Random();
         final String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvxyz";
-        return IntStream.range(0, 10).mapToObj(i -> String.valueOf(characters
-                .charAt((int) (characters.length() * Math.random())))).collect(Collectors.joining());
+        return IntStream.range(0, 10 + random.nextInt(5)).mapToObj(i -> String.valueOf(characters
+                .charAt(random.nextInt(characters.length())))).collect(Collectors.joining());
     }
 }

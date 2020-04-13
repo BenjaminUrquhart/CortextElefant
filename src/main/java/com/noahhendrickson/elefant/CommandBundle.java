@@ -77,6 +77,24 @@ public class CommandBundle {
         for (EmbedBuilder embed : embeds) channel.sendMessage(embed.setFooter(FOOTER).build()).queue();
     }
 
+    public User getUserFromMessage() {
+        if (message.getMentionedUsers().size() > 0) return message.getMentionedUsers().get(0);
+//        String content = message.getContentStripped().substring(command.getCommand().length() + 2);
+//
+//        System.out.println(content);
+//
+//        if (message.getJDA().getUsersByName(content, false).size() > 0)
+//            return message.getJDA().getUsersByName(content, false).get(0);
+//
+//        try {
+//            if (message.getJDA().getUserById(content) != null)
+//                return message.getJDA().getUserById(content);
+//        } catch (Exception ignored) {
+//        }
+
+        return null;
+    }
+
     public void sendUsageMessage() {
         sendMessage(
                 new EmbedBuilder()

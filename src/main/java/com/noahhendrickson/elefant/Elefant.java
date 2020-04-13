@@ -5,7 +5,6 @@ import com.noahhendrickson.elefant.listeners.SuggestionsListener;
 import com.noahhendrickson.elefant.logging.BaseLogger;
 import com.noahhendrickson.util.FileUtilKt;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
 import javax.security.auth.login.LoginException;
@@ -31,7 +30,6 @@ public class Elefant {
                     GatewayIntent.GUILD_BANS,
                     GatewayIntent.GUILD_VOICE_STATES,
                     GatewayIntent.GUILD_PRESENCES))
-                    .setActivity(Activity.listening("for " + PREFIX + "help"))
                     .addEventListeners(
                             new CommandExecutor(logger),
                             new LoggingListener(logger),
