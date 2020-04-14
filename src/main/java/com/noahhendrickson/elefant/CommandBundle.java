@@ -77,6 +77,12 @@ public class CommandBundle {
         for (EmbedBuilder embed : embeds) channel.sendMessage(embed.setFooter(FOOTER).build()).queue();
     }
 
+    public void addReaction(long emoteId) {
+        Emote emote = jda.getEmoteById(emoteId);
+        if (emote != null)
+            message.addReaction(emote).queue();
+    }
+
     public User getUserFromMessage() {
         if (message.getMentionedUsers().size() > 0) return message.getMentionedUsers().get(0);
 //        String content = message.getContentStripped().substring(command.getCommand().length() + 2);

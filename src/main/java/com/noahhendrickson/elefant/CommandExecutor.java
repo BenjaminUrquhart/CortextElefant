@@ -1,6 +1,8 @@
 package com.noahhendrickson.elefant;
 
 import com.noahhendrickson.elefant.commands.HelpCommand;
+import com.noahhendrickson.elefant.commands.admin.JoinRoleCommand;
+import com.noahhendrickson.elefant.commands.admin.LeaveRoleCommand;
 import com.noahhendrickson.elefant.commands.infractions.InfCheckCommand;
 import com.noahhendrickson.elefant.commands.infractions.InfSearchCommand;
 import com.noahhendrickson.elefant.commands.noah.SendControlMessageCommand;
@@ -43,14 +45,25 @@ public class CommandExecutor extends ListenerAdapter {
         this.commands = new ArrayList<>();
         this.logger = logger;
 
-        // Noah
-        registerCommand(new SendControlMessageCommand());
+        // Admin
+        registerCommand(new JoinRoleCommand());
+        registerCommand(new LeaveRoleCommand());
 
         // Infractions
         registerCommand(new InfCheckCommand());
         registerCommand(new InfSearchCommand());
 
+        // Noah
+        registerCommand(new SendControlMessageCommand());
+
+        // Other
+        registerCommand(new CodeCommand());
+        registerCommand(new JerCommand());
+        registerCommand(new PingCommand());
+
         // Punishments
+        registerCommand(new MuteCommand());
+        registerCommand(new UnmuteCommand());
         registerCommand(new WarnCommand());
 
         // Utilities
@@ -59,11 +72,7 @@ public class CommandExecutor extends ListenerAdapter {
         registerCommand(new RandomCoinCommand());
         registerCommand(new RandomNumberCommand());
 
-        registerCommand(new CodeCommand());
-        registerCommand(new JerCommand());
-        registerCommand(new MuteCommand());
-        registerCommand(new PingCommand());
-        registerCommand(new UnmuteCommand());
+        // Help
         registerCommand(new HelpCommand(this));
     }
 
