@@ -3,6 +3,7 @@ package com.noahhendrickson.elefant;
 import com.noahhendrickson.elefant.commands.HelpCommand;
 import com.noahhendrickson.elefant.commands.infractions.InfCheckCommand;
 import com.noahhendrickson.elefant.commands.infractions.InfSearchCommand;
+import com.noahhendrickson.elefant.commands.noah.SendControlMessageCommand;
 import com.noahhendrickson.elefant.commands.other.CodeCommand;
 import com.noahhendrickson.elefant.commands.other.JerCommand;
 import com.noahhendrickson.elefant.commands.other.PingCommand;
@@ -41,6 +42,9 @@ public class CommandExecutor extends ListenerAdapter {
     public CommandExecutor(BaseLogger logger) {
         this.commands = new ArrayList<>();
         this.logger = logger;
+
+        // Noah
+        registerCommand(new SendControlMessageCommand());
 
         // Infractions
         registerCommand(new InfCheckCommand());

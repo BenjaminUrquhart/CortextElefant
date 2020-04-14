@@ -12,14 +12,19 @@ public class RandomNumberCommand implements ICommand {
 
     @Override
     public void execute(CommandBundle bundle) {
-
         int end = 0;
         int start = 11;
 
-        if (bundle.areArgsMoreThan(2)) {
+        if (bundle.areArgsMoreThan(1)) {
             try {
-                end = Integer.parseInt(bundle.getArgAt(1));
-                start = Integer.parseInt(bundle.getArgAt(2)) + 1;
+                end = Integer.parseInt(bundle.getArgAt(0));
+                start = Integer.parseInt(bundle.getArgAt(1)) + 1;
+            } catch (NumberFormatException e) {
+                bundle.sendMessage("Please supply a valid number!");
+            }
+        } else if (bundle.hasArgs()) {
+            try {
+                end = Integer.parseInt(bundle.getArgAt(0));
             } catch (NumberFormatException e) {
                 bundle.sendMessage("Please supply a valid number!");
             }
@@ -45,6 +50,6 @@ public class RandomNumberCommand implements ICommand {
 
     @Override
     public String getUsage() {
-        return "[end number] [start number]";
+        return "[end] [start]";
     }
 }
