@@ -181,8 +181,6 @@ public class BaseLogger {
     }
 
     public void logGuildMemberRoleAdd(List<Role> roles, Member member) {
-        System.out.println("Here");
-
         if (roles == null || roles.size() <= 0) return;
 
         List<TextChannel> channels = getLogChannels(member.getGuild());
