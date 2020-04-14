@@ -16,23 +16,25 @@ public class EmojiCommand implements ICommand {
     @Override
     public void execute(CommandBundle bundle) {
         if (bundle.hasArgs()) {
-            Emote emote = bundle.getJDA().getEmoteById(bundle.getArgAt(0).replaceAll("<a?:(.+):|>", ""));
+            if (bundle.getArgAt(0).matches("<a?:(.+):([0-9]+)>")) {
+                Emote emote = bundle.getJDA().getEmoteById(bundle.getArgAt(0).replaceAll("<a?:(.+):|>", ""));
 
-            if (emote != null) {
-                StringBuilder builder = new StringBuilder();
+                if (emote != null) {
+                    StringBuilder builder = new StringBuilder();
 
-                builder.append("**ID:** ").append(emote.getId());
-                builder.append("\n**Name:** ").append(emote.getName());
+                    builder.append("**ID:** ").append(emote.getId());
+                    builder.append("\n**Name:** ").append(emote.getName());
 
-                if (emote.getGuild() != null)
-                    builder.append("\n**Guild:** ").append(emote.getGuild().getName()).append("(`")
-                            .append(emote.getGuild().getId()).append("`)");
+                    if (emote.getGuild() != null)
+                        builder.append("\n**Guild:** ").append(emote.getGuild().getName()).append("(`")
+                                .append(emote.getGuild().getId()).append("`)");
 
-                builder.append("\n**Animated:** ").append(emote.isAnimated() ? "Yes" : "No");
+                    builder.append("\n**Animated:** ").append(emote.isAnimated() ? "Yes" : "No");
 
-                bundle.sendMessage(builder.toString(), "https://cdn.discordapp.com/emojis/" +
-                        emote.getId() + "." + (emote.isAnimated() ? "gif" : "png"));
+                    bundle.sendMessage(builder.toString(), "https://cdn.discordapp.com/emojis/" +
+                            emote.getId() + "." + (emote.isAnimated() ? "gif" : "png"));
 
+                } else bundle.sendMessage("Invalid Emoji: `" + bundle.getArgAt(0) + "`");
             } else bundle.sendMessage("Invalid Emoji: `" + bundle.getArgAt(0) + "`");
         } else bundle.sendUsageMessage();
     }

@@ -1,8 +1,18 @@
 package com.noahhendrickson.elefant;
 
-import com.noahhendrickson.elefant.commands.*;
+import com.noahhendrickson.elefant.commands.HelpCommand;
+import com.noahhendrickson.elefant.commands.infractions.InfCheckCommand;
+import com.noahhendrickson.elefant.commands.infractions.InfSearchCommand;
+import com.noahhendrickson.elefant.commands.other.CodeCommand;
+import com.noahhendrickson.elefant.commands.other.JerCommand;
+import com.noahhendrickson.elefant.commands.other.PingCommand;
+import com.noahhendrickson.elefant.commands.punishments.MuteCommand;
+import com.noahhendrickson.elefant.commands.punishments.UnmuteCommand;
+import com.noahhendrickson.elefant.commands.punishments.WarnCommand;
 import com.noahhendrickson.elefant.commands.utilities.AvatarCommand;
 import com.noahhendrickson.elefant.commands.utilities.EmojiCommand;
+import com.noahhendrickson.elefant.commands.utilities.RandomCoinCommand;
+import com.noahhendrickson.elefant.commands.utilities.RandomNumberCommand;
 import com.noahhendrickson.elefant.logging.BaseLogger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -32,9 +42,18 @@ public class CommandExecutor extends ListenerAdapter {
         this.commands = new ArrayList<>();
         this.logger = logger;
 
+        // Infractions
+        registerCommand(new InfCheckCommand());
+        registerCommand(new InfSearchCommand());
+
+        // Punishments
+        registerCommand(new WarnCommand());
+
         // Utilities
         registerCommand(new AvatarCommand());
         registerCommand(new EmojiCommand());
+        registerCommand(new RandomCoinCommand());
+        registerCommand(new RandomNumberCommand());
 
         registerCommand(new CodeCommand());
         registerCommand(new JerCommand());
@@ -44,10 +63,10 @@ public class CommandExecutor extends ListenerAdapter {
         registerCommand(new HelpCommand(this));
     }
 
+
     @Override
     public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
         User author = event.getAuthor();
-
         if (author.isBot() || author.isFake()) return;
 
         String contentRaw = event.getMessage().getContentRaw();
@@ -61,8 +80,6 @@ public class CommandExecutor extends ListenerAdapter {
                 TextChannel channel = event.getChannel();
 
                 if (command.getCommand().equalsIgnoreCase(cmd) || command.getAliases().contains(cmd)) {
-                    channel.sendTyping().queue();
-
                     if (channel.getTopic() != null) {
                         if (channel.getTopic().contains("{-" + cmd + "}")) {
                             channel.sendMessage("This command is unavailable in this channel!").queue();

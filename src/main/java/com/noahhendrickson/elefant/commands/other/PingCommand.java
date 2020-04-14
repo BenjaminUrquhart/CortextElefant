@@ -1,4 +1,4 @@
-package com.noahhendrickson.elefant.commands;
+package com.noahhendrickson.elefant.commands.other;
 
 import com.noahhendrickson.elefant.CommandBundle;
 import com.noahhendrickson.elefant.ICommand;

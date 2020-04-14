@@ -1,5 +1,6 @@
 package com.noahhendrickson.elefant.logging;
 
+import com.noahhendrickson.elefant.utils.FormatUtils;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateNicknameEvent;
 import net.dv8tion.jda.api.events.user.update.UserUpdateDiscriminatorEvent;
@@ -12,6 +13,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+
+import static com.noahhendrickson.elefant.utils.FormatUtils.formatFullUser;
 
 /**
  * Created by Noah Hendrickson on 4/12/2020
@@ -33,7 +36,7 @@ public class BaseLogger {
         for (TextChannel channel : channels) {
             ZoneId zone = ZoneId.of("America/New_York");
 
-            channel.sendMessage(filterEveryone(String.format("`[%s]` %s %s", now.atZoneSameInstant(zone)
+            channel.sendMessage(FormatUtils.filterEveryone(String.format("`[%s]` %s %s", now.atZoneSameInstant(zone)
                     .format(DateTimeFormatter.ISO_LOCAL_TIME).substring(0, 8), emote, message))).queue();
         }
     }
@@ -235,17 +238,6 @@ public class BaseLogger {
             log(OffsetDateTime.now(), NAME, formatFullUser(event.getUser()) + " changed discriminator from `" +
                     name + event.getOldDiscriminator() + "` to `" + name + event.getNewDiscriminator() + "`", channels);
         });
-    }
-
-    private String formatFullUser(User user) {
-        return filterEveryone(user.getAsTag() + " (`" + user.getId() + "`)");
-    }
-
-    private String filterEveryone(String input) {
-        if (input == null) return null;
-        return input.replace("@everyone", "@\u0435veryone")
-                .replace("@here", "@h\u0435re")
-                .replace("discord.gg/", "dis\u0441ord.gg/");
     }
 
     private List<TextChannel> getLogChannels(Guild guild) {

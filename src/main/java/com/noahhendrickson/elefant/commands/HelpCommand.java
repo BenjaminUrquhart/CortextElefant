@@ -63,7 +63,7 @@ public class HelpCommand implements ICommand {
             StringBuilder message = new StringBuilder();
 
             commands.forEach(command -> {
-                if (bundle.getMember().hasPermission(command.getRequiredPermissions()))
+                if (bundle.getMember().hasPermission(command.getRequiredPermissions()) && !command.isHidden())
                     message.append("**").append(Elefant.PREFIX).append(command.getCommand())
                             .append(command.getUsage().equals("") ? "" : " ").append(command.getUsage()).append("** - ")
                             .append(command.getDescription()).append("\n\n");

@@ -1,4 +1,4 @@
-package com.noahhendrickson.elefant.commands;
+package com.noahhendrickson.elefant.commands.punishments;
 
 import com.noahhendrickson.elefant.CommandBundle;
 import com.noahhendrickson.elefant.ICommand;
@@ -36,6 +36,7 @@ public class UnmuteCommand implements ICommand {
                 bundle.getGuild().removeRoleFromMember(member, role).queue();
 
                 bundle.sendMessage("\uD83D\uDC4C " + user.getAsTag() + " is now unmuted!");
+
             } else bundle.sendMessage("Please mention a user for me to unmute!");
         } else bundle.sendUsageMessage();
     }

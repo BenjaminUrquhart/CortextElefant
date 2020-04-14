@@ -1,12 +1,15 @@
-package com.noahhendrickson.elefant.commands;
+package com.noahhendrickson.elefant.commands.punishments;
 
 import com.noahhendrickson.elefant.CommandBundle;
 import com.noahhendrickson.elefant.ICommand;
+import com.noahhendrickson.elefant.infractions.InfractionType;
+import com.noahhendrickson.elefant.infractions.InfractionsManager;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
 
+import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,6 +47,10 @@ public class MuteCommand implements ICommand {
 
                 bundle.sendMessage("\uD83D\uDC4C " + user.getAsTag() + " is now muted! (`" +
                         reason.substring(0, reason.length() - 1) + "`)");
+
+                new InfractionsManager(user).addInfraction(OffsetDateTime.now(), InfractionType.MUTE,
+                        bundle.getUser(), reason.substring(0, reason.length() - 1));
+
             } else bundle.sendMessage("Please mention a user for me to mute!");
         } else bundle.sendUsageMessage();
     }
