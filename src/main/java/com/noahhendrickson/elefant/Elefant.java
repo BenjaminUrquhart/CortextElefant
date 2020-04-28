@@ -3,13 +3,17 @@ package com.noahhendrickson.elefant;
 import com.noahhendrickson.elefant.listeners.LoggingListener;
 import com.noahhendrickson.elefant.listeners.SuggestionsListener;
 import com.noahhendrickson.elefant.logging.BaseLogger;
-import com.noahhendrickson.util.FileUtilKt;
+//import com.noahhendrickson.util.FileUtilKt;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
 import javax.security.auth.login.LoginException;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Arrays;
 
 /**
@@ -24,7 +28,7 @@ public class Elefant extends ListenerAdapter {
     public Elefant() {
         this.logger = new BaseLogger();
         try {
-            JDABuilder.createDefault(FileUtilKt.readFileLines("LoginDetails").get(0), Arrays.asList(
+            JDABuilder.createDefault(Files.readAllLines(new File("LoginDetails").toPath()).get(0), Arrays.asList(
                     GatewayIntent.GUILD_MEMBERS,
                     GatewayIntent.GUILD_INVITES,
                     GatewayIntent.GUILD_MESSAGES,
@@ -39,7 +43,8 @@ public class Elefant extends ListenerAdapter {
                             new LoggingListener(logger),
                             new SuggestionsListener())
                     .build();
-        } catch (LoginException e) {
+        	
+        } catch (IOException | LoginException e) {
             e.printStackTrace();
         }
     }
