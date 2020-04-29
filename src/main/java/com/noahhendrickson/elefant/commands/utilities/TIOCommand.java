@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
@@ -30,7 +31,7 @@ public class TIOCommand implements ICommand {
 	private static final String LANGUAGE_URL = "https://tio.run/static/3fbdee7a34cd8d340fe2dbd19acd2391-languages.json";
 	private static final String RUN_URL = "https://tio.run/cgi-bin/static/fb67788fd3d1ebf92e66b295525335af-run";
 	
-	private static final OkHttpClient CLIENT = new OkHttpClient();
+	private static final OkHttpClient CLIENT = new OkHttpClient.Builder().readTimeout(65, TimeUnit.SECONDS).build();
 	
 	private static Map<String, String> languages, lookup;
 	
